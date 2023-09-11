@@ -1,0 +1,65 @@
+name: Tests execution
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths:
+      - '**.php'
+      - '**.js'
+      - '**.vue'
+  push:
+    branches:
+      - develop
+      - main
+    paths:
+      - '**.php'
+      - '**.js'
+      - '**.vue'
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_DATABASE: markt_test
+          MYSQL_USER: markt
+          MYSQL_PASSWORD: secret
+          MYSQL_ROOT_PASSWORD: secret
+        ports:
+          - 13306:3306
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+      - name: Start mysql service
+        run: sudo systemctl start mysql
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: '8.2'
+          extensions: mbstring, dom, fileinfo, mysql
+          coverage: xdebug
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Install PHP packages
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --no-suggest --optimize-autoloader
+
+      - name: Prepare markt api
+        run: |
+          cp .env.ci .env
+          php artisan key:generate
+
+      - name: Filesystem permissions
+        run: chmod a=rwx storage bootstrap/cache
+
+      - name: Clear Laravel cache
+        run: php artisan optimize:clear
+
+      - name: Execute api tests
+        run: php artisan test
