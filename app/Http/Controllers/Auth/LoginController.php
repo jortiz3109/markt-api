@@ -28,13 +28,15 @@ class LoginController extends Controller
             ->where('email', $request->input('email'))
             ->first();
 
+        $expiresAt = Carbon::now()->addMinutes(config('sanctum.lifetime'));
+
         return response()->json([
             'token' => $user->createToken(
                 name: 'web_app',
                 ipAddress: $request->ip(),
-                expiresAt: Carbon::now()->addMinutes(config('sanctum.lifetime'))
+                expiresAt: $expiresAt
             )->plainTextToken,
-            'lifetime' => config('sanctum.lifetime'),
+            'expires_at' => $expiresAt,
             'user' => $user->only(['name', 'email'])
         ]);
     }
