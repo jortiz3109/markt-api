@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return response()->json(['message' => 'Success from octane, minikube and kubernetes!']);
+    return response()->json(['message' => 'Success from octane, minikube, ingress and kubernetes!']);
 });
