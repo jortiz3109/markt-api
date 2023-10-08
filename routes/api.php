@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,8 +20,8 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::name('user.')->prefix('user')->group(function () {
-            Route::name('info')->get(uri: 'info', action: function () {
-                    return response()->json(['user' => auth()->user()->only(['name', 'email'])]);
-                });
+        Route::name('info')->get(uri: 'info', action: function () {
+            return response()->json(['user' => auth()->user()->only(['name', 'email'])]);
         });
+    });
 });
