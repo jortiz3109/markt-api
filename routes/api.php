@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ShoppingListController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,5 +23,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::name('info')->get(uri: 'info', action: function () {
             return response()->json(['user' => auth()->user()->only(['name', 'email'])]);
         });
+    });
+
+    Route::name('shopping-lists.')->prefix('shopping-lists')->group(function () {
+        Route::name('index')->get('/', [ShoppingListController::class, 'index']);
     });
 });

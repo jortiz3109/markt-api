@@ -12,7 +12,7 @@ class TokenController extends Controller
 {
     public function renew(): JsonResponse
     {
-        $expiresAt = Carbon::now()->addMinutes(config('sanctum.lifetime'))->toDateTimeString();
+        $expiresAt = Carbon::now()->addMinutes(config('sanctum.lifetime'));
 
         Auth::user()
             ->currentAccessToken()
