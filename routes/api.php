@@ -27,5 +27,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::name('shopping-lists.')->prefix('shopping-lists')->group(function () {
         Route::name('index')->get('/', [ShoppingListController::class, 'index']);
-    });
+        Route::name('store')->post('/', [ShoppingListController::class, 'store']);
+        Route::name('show')->get('/{uuid}', [ShoppingListController::class, 'show']);
+        Route::name('delete')->delete('{uuid}', [ShoppingListController::class, 'destroy']);
+        Route::name('update')->patch('{uuid}', [ShoppingListController::class, 'update']);
+    })->whereUuid('uuid');
 });

@@ -14,9 +14,11 @@ class ShoppingListResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'uuid' => $this->uuid,
             'total' => Money::format($this->total),
             'is_paid' => $this->isPaid(),
             'paid_at' => $this->paid_at,
+            'items_count' => $this->whenCounted('items'),
             'shop' => ShopResource::make($this->whenLoaded('shop')),
         ];
     }
