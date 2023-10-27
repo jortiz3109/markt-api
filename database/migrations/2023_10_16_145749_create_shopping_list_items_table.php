@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->id();
             $table->string('item', 120);
             $table->unsignedBigInteger('price');
+            $table->string('category', 150)->default('uncategorized');
             $table->boolean('in_offer')->default(false);
             $table->foreignIdFor(ShoppingList::class);
             $table->timestamps();

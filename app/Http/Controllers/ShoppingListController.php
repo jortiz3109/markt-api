@@ -12,7 +12,6 @@ use App\Models\ShoppingList;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class ShoppingListController extends Controller
 {
@@ -20,6 +19,7 @@ class ShoppingListController extends Controller
     {
         $shoppingLists = ShoppingList::with('shop:id,name')
             ->withCount('items')
+            ->withSum('items', 'price')
             ->where(['user_id' => Auth::id()])
             ->paginate();
 
@@ -35,7 +35,6 @@ class ShoppingListController extends Controller
     public function update(UpdateRequest $request, Update $action): ShoppingListResource
     {
         $shoppingList = $action->handle($request->validated(), $request->user());
-
         return ShoppingListResource::make($shoppingList);
     }
 
